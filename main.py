@@ -14,9 +14,10 @@ parser.add_argument("--playerName", default="Do Quang Manh", help="Player Name")
 parser.add_argument("--playerYear", default="K15")
 parser.add_argument("--playerMajor", default="AI", type=str)
 parser.add_argument("--MSSV", default="HE153129", type=str)
+parser.add_argument("--main_csv_file", default="data/dataTrack.csv")
 opt = parser.parse_args()
 
-dataDict = {
+dataIndividualDict = {
     'HoTen': [],
     'Khoa': [],
     'Nganh': [],
@@ -26,6 +27,8 @@ dataDict = {
     'Score': [],
     'Option': [],
 }
+
+dataDict = pd.read_csv(opt.main_csv_file).to_dict('list')
 
 
 # Setup pygame/window --------------------------------------------- #
@@ -86,7 +89,20 @@ def update():
             dataDict['Option'].append("play" if state=="game" else "test")
             df = pd.DataFrame(dataDict,)
             os.makedirs('data', exist_ok=True)
-            df.to_csv('data/dataTrack.csv', index=False)
+            df.to_csv(opt.main_csv_file, index=False)
+
+            dataIndividualDict['HoTen'].append(opt.playerName)
+            dataIndividualDict['Khoa'].append(opt.playerYear)
+            dataIndividualDict['Nganh'].append(opt.playerMajor)
+            dataIndividualDict['MSSV'].append(opt.MSSV)
+            dataIndividualDict['Score'].append(game.score)
+            dataIndividualDict['Mosquito'].append(game.mosquito)
+            dataIndividualDict['Bee'].append(game.bee)
+            dataIndividualDict['Option'].append("play" if state=="game" else "test")
+            df = pd.DataFrame(dataDict,)
+            os.makedirs('data/individuals', exist_ok=True)
+            save_file = f"data/individuals/{opt.playerMajor}_{opt.playerYear}_{opt.playerName}_{opt.MSSV}.csv"
+            df.to_csv(save_file, index=False)
             state = "menu"
     pygame.display.update()
     mainClock.tick(FPS)
