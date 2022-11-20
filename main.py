@@ -99,7 +99,7 @@ def update():
             dataIndividualDict['Mosquito'].append(game.mosquito)
             dataIndividualDict['Bee'].append(game.bee)
             dataIndividualDict['Option'].append("play" if state=="game" else "test")
-            df = pd.DataFrame(dataDict,)
+            df = pd.DataFrame(dataIndividualDict,)
             os.makedirs('data/individuals', exist_ok=True)
             save_file = f"data/individuals/{opt.playerMajor}_{opt.playerYear}_{opt.playerName}_{opt.MSSV}.csv"
             df.to_csv(save_file, index=False)
