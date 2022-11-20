@@ -85,6 +85,7 @@ def update():
             dataDict['Bee'].append(game.bee)
             dataDict['Option'].append("play" if state=="game" else "test")
             df = pd.DataFrame(dataDict,)
+            os.makedirs('data', exist_ok=True)
             df.to_csv('data/dataTrack.csv', index=False)
             state = "menu"
     pygame.display.update()
